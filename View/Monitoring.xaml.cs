@@ -1,6 +1,7 @@
 ﻿using ProjektMonitoringNuget.ViewModel;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,14 +26,7 @@ namespace ProjektMonitoringNuget
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = monitor;
-        }
-
-        private void cmdTest_Click(object sender, RoutedEventArgs e)
-        {
-            monitor.Select();            
-            //txtBox.ItemsSource = monitor.Result;
-            //txtBox.Text = monitor.Result;
-        }        
+            this.DataContext = monitor;            
+        }              
     }
 }

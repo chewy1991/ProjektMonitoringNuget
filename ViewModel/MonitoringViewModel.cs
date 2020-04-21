@@ -6,59 +6,74 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using MySql.Data.MySqlClient;
+using ProjektMonitoringNuget.Business;
+using ProjektMonitoringNuget.Commands;
+using ProjektMonitoringNuget.View;
 
 namespace ProjektMonitoringNuget.ViewModel
 {
     public class MonitoringViewModel: INotifyPropertyChanged
-    {
-        private MySqlConnection _connection = null;
-        private DataTable _result;
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public DataTable Result { get { return this._result; } set { this._result = value; NotifyPropertyChanged(); }}
-        private MySqlBaseConnectionStringBuilder builder = new MySqlConnectionStringBuilder()
+    {        
+        private DataTable logentries = new DataTable();
+        private int? _selectedindex;
+        public event PropertyChangedEventHandler PropertyChanged;        
+        public DataTable Logentries { get { return this.logentries; } set { this.logentries = value; NotifyPropertyChanged(); }}
+        public int? SelectedIndex { get { return this._selectedindex; }set { this._selectedindex = value; } }
+        private LogmessageAdd addlogmessage ;
+        #region Commandbindings
+        private ICommand _loadCommand;
+        public ICommand LoadCommand
         {
-            Server = "localhost",
-            Database = "testat",
-            UserID = "Monitoring",
-            Password = "secret"
-        };
+            get
+            {
+                return _loadCommand ?? (_loadCommand = new CommandHandler(() => Logentries = DbMonitoringLogic.Select(), () => LoadCanExecute));               
+            }
+        }
+        public bool LoadCanExecute
+        {
+            get { return true; }
+        }
+
+        private ICommand _logClearCommand;
+        public ICommand LogClearCommand
+        {
+            get
+            {
+                return _logClearCommand ?? (_logClearCommand = new CommandHandler(() => Logentries = DbMonitoringLogic.LogClear((int)_selectedindex,logentries,out this._selectedindex), () => LogCanExecute));
+            }
+        }
+        public bool LogCanExecute
+        {
+            get { return this._selectedindex != null; }
+        }
+        private ICommand _addDataCommand;
+        public ICommand AddDataCommand
+        {
+            get
+            {
+                return _addDataCommand ?? (_addDataCommand = new CommandHandler(() => AddData(), () => AddCanExecute));
+            }
+        }
+        public bool AddCanExecute
+        {
+            get { return addlogmessage == null || !addlogmessage.IsLoaded; }
+        }
+        #endregion       
 
         public  MonitoringViewModel()
         {
-            _connection = new MySqlConnection(builder.ConnectionString);
-        }
+        }       
 
-        private void Open()
+        /// <summary>
+        /// Öffnet das Fenster zum hinzufügen von Log-Messages
+        /// </summary>
+        private void AddData()
         {
-            try
-            {
-                _connection.Open();                
-            }
-            catch(Exception e)
-            {
-                _connection.Close();
-            }            
+            addlogmessage = new LogmessageAdd();
+            addlogmessage.Show();
         }
-        private void CLose()
-        {
-            if(_connection.State == ConnectionState.Open)
-                _connection.Close();
-        }
-
-        public void Select()
-        {
-            Open();
-            MySqlDataAdapter dataAdapter = new MySqlDataAdapter("Select * FROM v_logentries",_connection);
-            DataTable dt = new DataTable();
-            dataAdapter.Fill(dt);
-            Result = dt;
-            CLose();
-
-        }
-
-
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {

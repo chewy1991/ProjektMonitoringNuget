@@ -78,8 +78,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Business\DbLogMessageAddLogic.cs" />
+    <Compile Include="Business\DbMonitoringLogic.cs" />
+    <Compile Include="DBAccess\DBConnect.cs" />
+    <Compile Include="ViewModel\LogmessageAddViewModel.cs" />
+    <Compile Include="View\Commands\CommandHandler.cs" />
     <Compile Include="ViewModel\MonitoringViewModel.cs" />
-    <Page Include="Monitoring.xaml">
+    <Page Include="View\LogmessageAdd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Monitoring.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -87,7 +96,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Monitoring.xaml.cs">
+    <Compile Include="View\LogmessageAdd.xaml.cs">
+      <DependentUpon>LogmessageAdd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Monitoring.xaml.cs">
       <DependentUpon>Monitoring.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
