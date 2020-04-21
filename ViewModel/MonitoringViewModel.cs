@@ -22,6 +22,7 @@ namespace ProjektMonitoringNuget.ViewModel
         public DataTable Logentries { get { return this.logentries; } set { this.logentries = value; NotifyPropertyChanged(); }}
         public int? SelectedIndex { get { return this._selectedindex; }set { this._selectedindex = value; } }
         private LogmessageAdd addlogmessage ;
+        
         #region Commandbindings
         private ICommand _loadCommand;
         public ICommand LoadCommand
@@ -53,7 +54,7 @@ namespace ProjektMonitoringNuget.ViewModel
         {
             get
             {
-                return _addDataCommand ?? (_addDataCommand = new CommandHandler(() => AddData(), () => AddCanExecute));
+                return _addDataCommand ?? (_addDataCommand = new CommandHandler(() => { addlogmessage = new LogmessageAdd();addlogmessage.Show(); }, () => AddCanExecute));
             }
         }
         public bool AddCanExecute
@@ -64,16 +65,7 @@ namespace ProjektMonitoringNuget.ViewModel
 
         public  MonitoringViewModel()
         {
-        }       
-
-        /// <summary>
-        /// Öffnet das Fenster zum hinzufügen von Log-Messages
-        /// </summary>
-        private void AddData()
-        {
-            addlogmessage = new LogmessageAdd();
-            addlogmessage.Show();
-        }
+        }               
 
         private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
         {

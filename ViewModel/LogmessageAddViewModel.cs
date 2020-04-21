@@ -26,27 +26,26 @@ namespace ProjektMonitoringNuget.ViewModel
         public DataTable Devices { get { return this._devices; } }
         public int? Selectedindex { get { return this._selectedindex; } set { this._selectedindex = value; NotifyPropertyChanged(); } }
 
+        public LogmessageAddViewModel() {}
+
         #region Commandbindings
         private ICommand _addcommand;
         public ICommand Addcommand
         {
             get
             {
-                return _addcommand ?? (_addcommand = new CommandHandler(() => Add(), () => AddCanExecute));
+                return _addcommand ?? (_addcommand = new CommandHandler(() => {
+                    DbLogMessageAddLogic.AddMessage(this);
+                    Selectedindex = null;
+                    this.Message = string.Empty;
+                }, () => AddCanExecute));
             }
         }
         public bool AddCanExecute
         {
             get { return !string.IsNullOrEmpty(_message) && !string.IsNullOrEmpty(_severity) && _selectedindex != null; }
         }
-        #endregion
-
-        private void Add()
-        {
-            DbLogMessageAddLogic.AddMessage(this);
-            Selectedindex = null;
-            this.Message = string.Empty;            
-        }
+        #endregion        
 
         public event PropertyChangedEventHandler PropertyChanged;
 

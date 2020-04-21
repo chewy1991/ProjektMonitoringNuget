@@ -30,8 +30,12 @@ namespace ProjektMonitoringNuget.Business
             var bOK = int.TryParse(vm.Devices.Rows[(int)vm.Selectedindex]["podid"].ToString(), out int podId) ;
             if (bOK)
             {
-                IDbCommand cmd = DBConnect.Connection.CreateCommand();
-                cmd.CommandText = $"call LogMessageAdd('{vm.Message}','{vm.Severity}',{podId},'{hostname}');";
+                MySqlCommand cmd = DBConnect.Connection.CreateCommand();                
+                cmd.CommandText = "call LogMessageAdd(@message,@severity,@podid,@hostname);";
+                cmd.Parameters.AddWithValue("@message",vm.Message);
+                cmd.Parameters.AddWithValue("@severity", vm.Severity);
+                cmd.Parameters.AddWithValue("@podid", podId);
+                cmd.Parameters.AddWithValue("@hostname", hostname);
                 DBConnect.Open();
                 cmd.ExecuteNonQuery();
                 DBConnect.Close();

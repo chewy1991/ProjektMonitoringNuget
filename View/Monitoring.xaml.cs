@@ -15,18 +15,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ProjektMonitoringNuget
+namespace ProjektMonitoringNuget.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class Monitoring : Window
     {
-        private MonitoringViewModel monitor = new MonitoringViewModel();
-        public MainWindow()
+        public Monitoring()
         {
             InitializeComponent();
-            this.DataContext = monitor;            
+            this.DataContext = new MonitoringViewModel();
         }              
     }
 }
