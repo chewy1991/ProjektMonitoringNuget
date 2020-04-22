@@ -3,9 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ProjektMonitoringNuget.View"
+        xmlns:local="clr-namespace:ProjektMonitoringNuget.ViewModel"
         mc:Ignorable="d"
         Title="Log eintragen" Height="1000" Width="800">
+    <Window.Resources>
+        <local:LogmessageAddViewModel x:Key="LogmessageAddvm"></local:LogmessageAddViewModel>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -22,12 +25,12 @@
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
         <Label Content="Log-Nachricht:" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16"></Label>
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" MaxLength="45" Text="{Binding Message}" ></TextBox>
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" MaxLength="45" Text="{Binding Source={StaticResource LogmessageAddvm},Path= Message}" ></TextBox>
         <Label Content="Log-Level:" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16"></Label>
-        <ListView Grid.Row="2" Grid.RowSpan="2" Grid.Column="1"  Grid.ColumnSpan="2" ItemsSource="{Binding SeverityList}" SelectedValue="{Binding Severity}" FontSize="20"/>
+        <ListView Grid.Row="2" Grid.RowSpan="2" Grid.Column="1"  Grid.ColumnSpan="2" ItemsSource="{Binding Source={StaticResource LogmessageAddvm},Path= SeverityList}" SelectedValue="{Binding Source={StaticResource LogmessageAddvm},Path= Severity}" FontSize="20"/>
         <Label Content="Geräte:" Grid.Row="4" Grid.Column="0" Height="50" HorizontalAlignment="Right" VerticalAlignment="Top" FontSize="16"></Label>
-        <DataGrid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Devices}" SelectedIndex="{Binding Selectedindex}" CanUserAddRows="False"></DataGrid>
-        <Button Content="Hinzufügen" Command="{Binding Addcommand}" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" MaxWidth="150"></Button>
+        <DataGrid Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" ItemsSource="{Binding Source={StaticResource LogmessageAddvm},Path= Devices}" SelectedIndex="{Binding Source={StaticResource LogmessageAddvm},Path= Selectedindex}" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" IsTextSearchEnabled="False" IsReadOnly="True"></DataGrid>
+        <Button Content="Hinzufügen" Command="{Binding Source={StaticResource LogmessageAddvm},Path= Addcommand}" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" MaxWidth="150"></Button>
 
     </Grid>
 </Window>

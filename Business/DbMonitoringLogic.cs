@@ -21,7 +21,7 @@ namespace ProjektMonitoringNuget.Business
             return dt;
         }
 
-        public static DataTable LogClear(int index, DataTable dt, out int? selectedindex)
+        public static DataTable LogClear(int index, DataTable dt)
         {
             var bOK = int.TryParse(dt.Rows[index]["Id"].ToString(), out int logId);
             if (bOK)
@@ -30,10 +30,8 @@ namespace ProjektMonitoringNuget.Business
                 cmd.CommandText = $"call LogClear({logId});";
                 DBConnect.Open();
                 cmd.ExecuteNonQuery();
-                DBConnect.Close();
-                
+                DBConnect.Close();                
             }
-            selectedindex = null;
             return Select();
         }
     }

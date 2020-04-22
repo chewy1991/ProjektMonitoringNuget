@@ -25,7 +25,6 @@ namespace ProjektMonitoringNuget.View
         public Monitoring()
         {
             InitializeComponent();
-            this.DataContext = new MonitoringViewModel();
-        }              
+        }        
     }
 }

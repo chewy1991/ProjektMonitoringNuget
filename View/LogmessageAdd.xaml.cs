@@ -23,7 +23,6 @@ namespace ProjektMonitoringNuget.View
         public LogmessageAdd()
         {
             InitializeComponent();
-            this.DataContext = new LogmessageAddViewModel();
         }
     }
 }

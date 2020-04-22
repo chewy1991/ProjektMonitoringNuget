@@ -8,23 +8,68 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ProjektMonitoringNuget.ViewModel
 {
-    public class LogmessageAddViewModel: INotifyPropertyChanged
+    public class LogmessageAddViewModel: DependencyObject
     {
-        private string _message;
-        private List<string> _severitylist = new List<string>() { "Error", "Warn", "Info", "Debug", "Trace" };
-        private string _severity;
-        private DataTable _devices = DbLogMessageAddLogic.Select();
-        private int? _selectedindex;
+        #region Dependency Properties
+        public static readonly DependencyProperty MessageProperty = DependencyProperty.Register("Message"
+                                                                                              , typeof(string)
+                                                                                              , typeof(LogmessageAddViewModel)
+                                                                                              , new UIPropertyMetadata(string.Empty));
 
-        public string Message { get { return this._message; } set { this._message = value; NotifyPropertyChanged(); } }
-        public List<string> SeverityList { get { return this._severitylist; } }
-        public string Severity { get { return this._severity; } set { this._severity = value; NotifyPropertyChanged(); } }
-        public DataTable Devices { get { return this._devices; } }
-        public int? Selectedindex { get { return this._selectedindex; } set { this._selectedindex = value; NotifyPropertyChanged(); } }
+        public static readonly DependencyProperty SeverityProperty = DependencyProperty.Register("Severity"
+                                                                                               , typeof(string)
+                                                                                               , typeof(LogmessageAddViewModel)
+                                                                                               , new UIPropertyMetadata(string.Empty));
+
+        public static readonly DependencyProperty SeverityListProperty = DependencyProperty.Register("SeverityList"
+                                                                                                    , typeof(List<string>)
+                                                                                                    , typeof(LogmessageAddViewModel)
+                                                                                                    , new UIPropertyMetadata(new List<string>() { "Error", "Warn", "Info", "Debug", "Trace" }));
+
+        public static readonly DependencyProperty DevicesProperty = DependencyProperty.Register("Devices"
+                                                                                               , typeof(DataTable)
+                                                                                               , typeof(LogmessageAddViewModel)
+                                                                                               , new UIPropertyMetadata(DbLogMessageAddLogic.Select()));
+
+        public static readonly DependencyProperty SelectedindexProperty = DependencyProperty.Register("Selectedindex"
+                                                                                                     , typeof(int)
+                                                                                                     , typeof(LogmessageAddViewModel)
+                                                                                                     , new UIPropertyMetadata(-1));
+
+
+        #endregion
+        #region Binding Properties
+        public string Message
+        {
+            get { return (string)GetValue(MessageProperty); }
+            set { SetValue(MessageProperty, value); }
+        }
+        public string Severity
+        {
+            get { return (string)GetValue(SeverityProperty); }
+            set { SetValue(SeverityProperty, value); }
+        }
+        public List<string> SeverityList
+        {
+            get { return (List<string>)GetValue(SeverityProperty); }
+            set { SetValue(SeverityProperty, value); }
+        }
+        public DataTable Devices
+        {
+            get { return (DataTable)GetValue(DevicesProperty); }
+            set { SetValue(DevicesProperty, value); }
+        }
+        public int Selectedindex
+        {
+            get { return (int)GetValue(SelectedindexProperty); }
+            set { SetValue(SelectedindexProperty, value); }
+        }
+        #endregion
 
         public LogmessageAddViewModel() {}
 
@@ -34,24 +79,13 @@ namespace ProjektMonitoringNuget.ViewModel
         {
             get
             {
-                return _addcommand ?? (_addcommand = new CommandHandler(() => {
-                    DbLogMessageAddLogic.AddMessage(this);
-                    Selectedindex = null;
-                    this.Message = string.Empty;
-                }, () => AddCanExecute));
+                return _addcommand ?? (_addcommand = new CommandHandler(() => {DbLogMessageAddLogic.AddMessage(this); Message = string.Empty; Selectedindex = -1; Severity = string.Empty; }, () => AddCanExecute));
             }
         }
         public bool AddCanExecute
         {
-            get { return !string.IsNullOrEmpty(_message) && !string.IsNullOrEmpty(_severity) && _selectedindex != null; }
+            get { return !string.IsNullOrEmpty(Message) && !string.IsNullOrEmpty(Severity) && Selectedindex >= 0; }
         }
-        #endregion        
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        #endregion           
     }
 }

@@ -3,9 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ProjektMonitoringNuget"
+        xmlns:local="clr-namespace:ProjektMonitoringNuget.ViewModel"
         mc:Ignorable="d"
         Title="Monitoring" Height="1000" Width="800">
+    <Window.Resources>
+        <local:MonitoringViewModel x:Key="Monitoringvm"></local:MonitoringViewModel>
+    </Window.Resources>
     
     <Grid>
         <Grid.ColumnDefinitions>
@@ -17,9 +20,9 @@
             <RowDefinition ></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>            
         </Grid.RowDefinitions>
-        <DataGrid x:Name="txtBox" ItemsSource="{Binding Logentries}" SelectedIndex="{Binding SelectedIndex}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" CanUserAddRows="False"></DataGrid>
-        <Button x:Name="cmdLoad" MaxWidth="200" Content="Load" Grid.Column="0" Grid.Row="1" Command="{Binding LoadCommand}"></Button>
-        <Button x:Name="cmdConfirm" MaxWidth="200" Content="Confirm" Grid.Column="1" Grid.Row="1" Command="{Binding LogClearCommand}"></Button>
-        <Button x:Name="cmdAdd" MaxWidth="200" Content="Add" Grid.Column="2" Grid.Row="1" Command="{Binding AddDataCommand}"></Button>
+        <DataGrid x:Name="txtBox" ItemsSource="{Binding Source={StaticResource Monitoringvm},Path=Logentries}" SelectedIndex="{Binding Source={StaticResource Monitoringvm},Path=SelectedIndex}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" CanUserAddRows="False" CanUserDeleteRows="False" CanUserSortColumns="False" CanUserReorderColumns="False" IsTextSearchEnabled="False" IsReadOnly="True"></DataGrid>
+        <Button x:Name="cmdLoad" MaxWidth="200" Content="Load" Grid.Column="0" Grid.Row="1" Command="{Binding Source={StaticResource Monitoringvm},Path=LoadCommand}"></Button>
+        <Button x:Name="cmdConfirm" MaxWidth="200" Content="Confirm" Grid.Column="1" Grid.Row="1" Command="{Binding Source={StaticResource Monitoringvm},Path=LogClearCommand}"></Button>
+        <Button x:Name="cmdAdd" MaxWidth="200" Content="Add" Grid.Column="2" Grid.Row="1" Command="{Binding Source={StaticResource Monitoringvm},Path=AddDataCommand}" ></Button>
     </Grid>
 </Window>

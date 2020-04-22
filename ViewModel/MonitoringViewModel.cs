@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using MySql.Data.MySqlClient;
 using ProjektMonitoringNuget.Business;
@@ -14,15 +15,44 @@ using ProjektMonitoringNuget.View;
 
 namespace ProjektMonitoringNuget.ViewModel
 {
-    public class MonitoringViewModel: INotifyPropertyChanged
-    {        
-        private DataTable logentries = new DataTable();
-        private int? _selectedindex;
-        public event PropertyChangedEventHandler PropertyChanged;        
-        public DataTable Logentries { get { return this.logentries; } set { this.logentries = value; NotifyPropertyChanged(); }}
-        public int? SelectedIndex { get { return this._selectedindex; }set { this._selectedindex = value; } }
-        private LogmessageAdd addlogmessage ;
+    public class MonitoringViewModel: DependencyObject 
+    {
+        #region Dependency Properties
+        public static readonly DependencyProperty AddLogmessageProperty = DependencyProperty.Register("AddLogmessage"
+                                                                                                    , typeof(LogmessageAdd)
+                                                                                                    , typeof(MonitoringViewModel)
+                                                                                                    , new UIPropertyMetadata(null));
         
+        public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register("SelectedIndex"
+                                                                                                    , typeof(int)
+                                                                                                    , typeof(MonitoringViewModel)
+                                                                                                    , new UIPropertyMetadata(-1));   
+
+        public static readonly DependencyProperty LogentriesProperty = DependencyProperty.Register("Logentries"
+                                                                                                 , typeof(DataTable)
+                                                                                                 , typeof(MonitoringViewModel));
+        
+        #endregion
+        #region Binding Properties
+        public LogmessageAdd AddLogmessage
+        {
+            get { return (LogmessageAdd)GetValue(AddLogmessageProperty); }
+            set { SetValue(AddLogmessageProperty, value); }
+        }
+
+        public int SelectedIndex
+        {
+            get { return (int)GetValue(SelectedIndexProperty); }
+            set { SetValue(SelectedIndexProperty, value); }
+        }
+
+        public DataTable Logentries
+        {
+            get { return (DataTable)GetValue(LogentriesProperty); }
+            set { SetValue(LogentriesProperty, value); }
+        }
+        #endregion
+
         #region Commandbindings
         private ICommand _loadCommand;
         public ICommand LoadCommand
@@ -42,35 +72,32 @@ namespace ProjektMonitoringNuget.ViewModel
         {
             get
             {
-                return _logClearCommand ?? (_logClearCommand = new CommandHandler(() => Logentries = DbMonitoringLogic.LogClear((int)_selectedindex,logentries,out this._selectedindex), () => LogCanExecute));
+                return _logClearCommand ?? (_logClearCommand = new CommandHandler(() => Logentries = DbMonitoringLogic.LogClear(SelectedIndex, Logentries), () => LogCanExecute));
             }
         }
         public bool LogCanExecute
         {
-            get { return this._selectedindex != null; }
+            get { return SelectedIndex >= 0; }
         }
         private ICommand _addDataCommand;
         public ICommand AddDataCommand
         {
             get
             {
-                return _addDataCommand ?? (_addDataCommand = new CommandHandler(() => { addlogmessage = new LogmessageAdd();addlogmessage.Show(); }, () => AddCanExecute));
+                return _addDataCommand ?? (_addDataCommand = new CommandHandler(() => { AddLogmessage = new LogmessageAdd(); AddLogmessage.Show(); }, () => AddCanExecute));
             }
         }
         public bool AddCanExecute
         {
-            get { return addlogmessage == null || !addlogmessage.IsLoaded; }
+            get { return AddLogmessage == null || !AddLogmessage.IsLoaded; }
         }
         #endregion       
 
         public  MonitoringViewModel()
         {
-        }               
+        }         
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+        
 
     }
 }
