@@ -1,27 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace ProjektMonitoringNuget.Commands
+namespace ProjektMonitoringNuget.View.Commands
 {
-    public class CommandHandler:ICommand
+    public class CommandHandler : ICommand
     {
-        private Action _action;
-        private Func<bool> _canExecute;
+        private readonly Action     _action;
+        private readonly Func<bool> _canExecute;
 
         public CommandHandler(Action action, Func<bool> canExecute)
         {
-            this._action = action;
-            this._canExecute = canExecute;
+            _action = action;
+            _canExecute = canExecute;
         }
 
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         public bool CanExecute(object parameter)

@@ -1,10 +1,5 @@
-﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
+using MySql.Data.MySqlClient;
 using ProjektMonitoringNuget.DBAccess;
 
 namespace ProjektMonitoringNuget.Business
@@ -13,25 +8,26 @@ namespace ProjektMonitoringNuget.Business
     {
         public static DataTable Select()
         {
-            DBConnect.Open();
-            var dataAdapter = new MySqlDataAdapter("Select id AS Id,pod,location,hostname,severity,timestamp,message  FROM v_logentries", DBConnect.Connection);
-            DataTable dt = new DataTable();
-            dataAdapter.Fill(dt);            
-            DBConnect.Close();
+            DbConnect.Open();
+            var dataAdapter = new MySqlDataAdapter("Select id AS Id,pod,location,hostname,severity,timestamp,message  FROM v_logentries", DbConnect.Connection);
+            var dt = new DataTable();
+            dataAdapter.Fill(dt);
+            DbConnect.Close();
             return dt;
         }
 
         public static DataTable LogClear(int index, DataTable dt)
         {
-            var bOK = int.TryParse(dt.Rows[index]["Id"].ToString(), out int logId);
-            if (bOK)
+            var bOk = int.TryParse(dt.Rows[index]["Id"].ToString(), out var logId);
+            if (bOk)
             {
-                IDbCommand cmd = DBConnect.Connection.CreateCommand();
+                IDbCommand cmd = DbConnect.Connection.CreateCommand();
                 cmd.CommandText = $"call LogClear({logId});";
-                DBConnect.Open();
+                DbConnect.Open();
                 cmd.ExecuteNonQuery();
-                DBConnect.Close();                
+                DbConnect.Close();
             }
+
             return Select();
         }
     }

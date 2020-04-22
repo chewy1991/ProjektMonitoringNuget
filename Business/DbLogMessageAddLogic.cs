@@ -1,13 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using ProjektMonitoringNuget.DBAccess;
 using ProjektMonitoringNuget.ViewModel;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace ProjektMonitoringNuget.Business
 {
@@ -15,11 +9,11 @@ namespace ProjektMonitoringNuget.Business
     {
         public static DataTable Select()
         {
-            DBConnect.Open();
-            var dataAdapter = new MySqlDataAdapter("Select pod.point_of_delivery_id AS podid, Device.hostname, Device.ip_adresse, Device.anzahlports FROM Device INNER JOIN Adresse ON Device.device_adresse = Adresse.adresse_id INNER JOIN point_of_delivery AS pod ON pod.pod_adresse = Adresse.adresse_id;", DBConnect.Connection);
+            DbConnect.Open();
+            var dataAdapter = new MySqlDataAdapter("Select pod.point_of_delivery_id AS podid, Device.hostname, Device.ip_adresse, Device.anzahlports FROM Device INNER JOIN Adresse ON Device.device_adresse = Adresse.adresse_id INNER JOIN point_of_delivery AS pod ON pod.pod_adresse = Adresse.adresse_id;", DbConnect.Connection);
             DataTable dt = new DataTable();
             dataAdapter.Fill(dt);
-            DBConnect.Close();
+            DbConnect.Close();
             return dt;
         }
 
@@ -30,15 +24,15 @@ namespace ProjektMonitoringNuget.Business
             var bOK = int.TryParse(vm.Devices.Rows[(int)vm.Selectedindex]["podid"].ToString(), out int podId) ;
             if (bOK)
             {
-                MySqlCommand cmd = DBConnect.Connection.CreateCommand();                
+                MySqlCommand cmd = DbConnect.Connection.CreateCommand();                
                 cmd.CommandText = "call LogMessageAdd(@message,@severity,@podid,@hostname);";
                 cmd.Parameters.AddWithValue("@message",vm.Message);
                 cmd.Parameters.AddWithValue("@severity", vm.Severity);
                 cmd.Parameters.AddWithValue("@podid", podId);
                 cmd.Parameters.AddWithValue("@hostname", hostname);
-                DBConnect.Open();
+                DbConnect.Open();
                 cmd.ExecuteNonQuery();
-                DBConnect.Close();
+                DbConnect.Close();
 
             }
         }

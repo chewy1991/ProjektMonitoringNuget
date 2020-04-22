@@ -80,7 +80,7 @@
     </ApplicationDefinition>
     <Compile Include="Business\DbLogMessageAddLogic.cs" />
     <Compile Include="Business\DbMonitoringLogic.cs" />
-    <Compile Include="DBAccess\DBConnect.cs" />
+    <Compile Include="DBAccess\DbConnect.cs" />
     <Compile Include="ViewModel\LogmessageAddViewModel.cs" />
     <Compile Include="View\Commands\CommandHandler.cs" />
     <Compile Include="ViewModel\MonitoringViewModel.cs" />

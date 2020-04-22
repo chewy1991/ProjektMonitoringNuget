@@ -1,40 +1,23 @@
-﻿using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
 
 namespace ProjektMonitoringNuget.DBAccess
 {
-    public static class DBConnect
+    public static class DbConnect
     {
-        private static MySqlBaseConnectionStringBuilder builder = new MySqlConnectionStringBuilder()
-        {
-            Server = "localhost",
-            Database = "testat",
-            UserID = "Monitoring",
-            Password = "secret"
-        };
-        private static MySqlConnection _connection = new MySqlConnection(builder.ConnectionString);
-        public static MySqlConnection Connection { get { return _connection; } }
+        private static readonly MySqlBaseConnectionStringBuilder Builder = new MySqlConnectionStringBuilder {Server = "localhost", Database = "testat", UserID = "Monitoring", Password = "secret"};
+        public static MySqlConnection Connection { get; } = new MySqlConnection(Builder.ConnectionString);
 
         public static void Open()
         {
-            try
-            {
-                _connection.Open();
-            }
-            catch (Exception e)
-            {
-                _connection.Close();
-            }
+            try { Connection.Open(); }
+            catch (Exception) { Connection.Close(); }
         }
+
         public static void Close()
         {
-            if (_connection.State == ConnectionState.Open)
-                _connection.Close();
+            if (Connection.State == ConnectionState.Open) Connection.Close();
         }
     }
 }
