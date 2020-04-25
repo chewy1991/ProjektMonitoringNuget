@@ -7,24 +7,35 @@
         mc:Ignorable = "d"
         Title = "Log eintragen"
         Height = "1000"
-        Width = "800">
+        Width = "3000">
     <Window.Resources>
         <local:LogmessageAddViewModel x:Key = "LogmessageAddvm" />
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" />
             <ColumnDefinition />
             <ColumnDefinition />
+            <ColumnDefinition Width="200" />
             <ColumnDefinition />
             <ColumnDefinition />
+            <ColumnDefinition Width = "200" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height = "30" />
+            <RowDefinition Height = "30" />
+            <RowDefinition Height = "50" />
+            <RowDefinition Height = "110" />
+            <RowDefinition Height="100" />
+            <RowDefinition Height = "100" />
+            <RowDefinition Height = "100" />
+            <RowDefinition Height = "100" />
+            <RowDefinition Height = "100" />
+            <RowDefinition Height = "100" />
+            <RowDefinition Height = "100" />
             <RowDefinition Height = "25" />
-            <RowDefinition Height = "50" />
-            <RowDefinition Height = "50" /> <RowDefinition Height = "110" />
-            <RowDefinition />
-            <RowDefinition Height = "50" />
         </Grid.RowDefinitions>
+        <!--
         <Label Content = "Log-Nachricht:"
                Grid.Row = "1"
                Grid.Column = "0"
@@ -48,31 +59,173 @@
                   Grid.ColumnSpan = "2"
                   ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= SeverityList}"
                   SelectedValue = "{Binding Source={StaticResource LogmessageAddvm},Path= Severity}"
-                  FontSize = "20" />
-        <Label Content = "Geräte:"
+                  FontSize = "20" /> -->
+        <!-- DataGrids -->
+        <Label Content = "Abrechnung:"
+               Grid.Row = "3"
+               Grid.Column = "0"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" />
+        <Label Content = "Adresse:"
                Grid.Row = "4"
                Grid.Column = "0"
                Height = "50"
                HorizontalAlignment = "Right"
                VerticalAlignment = "Top"
                FontSize = "16" />
+        <Label Content = "Geräte:"
+               Grid.Row = "5"
+               Grid.Column = "0"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" />
+        <Label Content = "Kontaktperson:"
+               Grid.Row = "6"
+               Grid.Column = "0"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" />
+        <Label Content = "Location:"
+               Grid.Row = "7"
+               Grid.Column = "0"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" />
+        <Label Content = "Networkinterface:"
+               Grid.Row = "8"
+               Grid.Column = "0"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" />
+        <Label Content = "Ports:"
+               Grid.Row = "9"
+               Grid.Column = "0"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" />
+        <Label Content = "Abrechnungsposition:"
+               Grid.Row = "3"
+               Grid.Column = "3"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" />
+        <Label Content = "Credentials:"
+               Grid.Row = "4"
+               Grid.Column = "3"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" />
+        <Label Content = "Devicecategory:"
+               Grid.Row = "5"
+               Grid.Column = "3"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Bottom"
+               FontSize = "16" Margin="0,0,0,51" />
+        <Label Content = "Kunde:"
+               Grid.Row = "6"
+               Grid.Column = "3"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" />
+        <Label Content = "Logmessage:"
+               Grid.Row = "7"
+               Grid.Column = "3"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" />
+        <Label Content = "Point_of_delivery:"
+               Grid.Row = "8"
+               Grid.Column = "3"
+               Height = "50"
+               HorizontalAlignment = "Right"
+               VerticalAlignment = "Top"
+               FontSize = "16" Width="128" />
+        <!-- DataGrids -->
+        <!-- abrechnung -->
+        <DataGrid Grid.Row = "3"
+                  Grid.Column = "1"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Abrechnung}"
+                  />
+        <!-- Abrechnungsposition -->
+        <DataGrid Grid.Row = "3"
+                  Grid.Column = "4"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Abrechnungsposition}" />
+        <!-- Adresse -->
         <DataGrid Grid.Row = "4"
                   Grid.Column = "1"
                   Grid.ColumnSpan = "2"
-                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Devices}"
-                  SelectedIndex = "{Binding Source={StaticResource LogmessageAddvm},Path= Selectedindex}"
-                  CanUserAddRows = "False"
-                  CanUserDeleteRows = "False"
-                  CanUserSortColumns = "False"
-                  CanUserReorderColumns = "False"
-                  IsTextSearchEnabled = "False"
-                  IsReadOnly = "True" />
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Adresse}" />
+        <!-- Credentials -->
+        <DataGrid Grid.Row = "4"
+                  Grid.Column = "4"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Credentials}" />
+        <!-- Geräte -->
+        <DataGrid Grid.Row = "5"
+                  Grid.Column = "1"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Devices}" />
+        <!-- Devicecategory -->
+        <DataGrid Grid.Row = "5"
+                  Grid.Column = "4"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Devicecategory}" />
+        <!-- kontaktperson -->
+        <DataGrid Grid.Row = "6"
+                  Grid.Column = "1"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Kontaktperson}" />
+        <!-- kunde -->
+        <DataGrid Grid.Row = "6"
+                  Grid.Column = "4"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Kunde}" />
+        <!-- location -->
+        <DataGrid Grid.Row = "7"
+                  Grid.Column = "1"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Location}" />
+        <!-- logmessage -->
+        <DataGrid Grid.Row = "7"
+                  Grid.Column = "4"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Logmessage}" />
+        <!-- Networkinterface -->
+        <DataGrid Grid.Row = "8"
+                  Grid.Column = "1"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Networkinterface}" />
+        <!-- Point_of_delivery -->
+        <DataGrid Grid.Row = "8"
+                  Grid.Column = "4"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Point_of_delivery}" />
+        <!-- Ports -->
+        <DataGrid Grid.Row = "9"
+                  Grid.Column = "1"
+                  Grid.ColumnSpan = "2"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Ports}" />
+
+        <!-- Buttons -->
         <Button Content = "Hinzufügen"
                 Command = "{Binding Source={StaticResource LogmessageAddvm},Path= Addcommand}"
-                Grid.Column = "1"
-                Grid.Row = "6"
-                Grid.ColumnSpan = "2"
-                MaxWidth = "150" />
+                Grid.Column = "3"
+                Grid.Row = "10"
+                MaxWidth = "150" /> 
 
     </Grid>
 </Window>

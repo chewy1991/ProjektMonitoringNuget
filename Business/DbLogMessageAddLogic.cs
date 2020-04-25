@@ -17,24 +17,24 @@ namespace ProjektMonitoringNuget.Business
             return dt;
         }
 
-        public static void AddMessage(LogmessageAddViewModel logmodel)
-        {
-            LogmessageAddViewModel vm = logmodel;
-            var hostname = vm.Devices.Rows[(int)vm.Selectedindex]["hostname"].ToString();
-            var bOK = int.TryParse(vm.Devices.Rows[(int)vm.Selectedindex]["podid"].ToString(), out int podId) ;
-            if (bOK)
-            {
-                MySqlCommand cmd = DbConnect.Connection.CreateCommand();                
-                cmd.CommandText = "call LogMessageAdd(@message,@severity,@podid,@hostname);";
-                cmd.Parameters.AddWithValue("@message",vm.Message);
-                cmd.Parameters.AddWithValue("@severity", vm.Severity);
-                cmd.Parameters.AddWithValue("@podid", podId);
-                cmd.Parameters.AddWithValue("@hostname", hostname);
-                DbConnect.Open();
-                cmd.ExecuteNonQuery();
-                DbConnect.Close();
+        //public static void AddMessage(LogmessageAddViewModel logmodel)
+        //{
+        //    LogmessageAddViewModel vm = logmodel;
+        //    var hostname = vm.Devices.Rows[(int)vm.Selectedindex]["hostname"].ToString();
+        //    var bOK = int.TryParse(vm.Devices.Rows[(int)vm.Selectedindex]["podid"].ToString(), out int podId) ;
+        //    if (bOK)
+        //    {
+        //        MySqlCommand cmd = DbConnect.Connection.CreateCommand();                
+        //        cmd.CommandText = "call LogMessageAdd(@message,@severity,@podid,@hostname);";
+        //        cmd.Parameters.AddWithValue("@message",vm.Message);
+        //        cmd.Parameters.AddWithValue("@severity", vm.Severity);
+        //        cmd.Parameters.AddWithValue("@podid", podId);
+        //        cmd.Parameters.AddWithValue("@hostname", hostname);
+        //        DbConnect.Open();
+        //        cmd.ExecuteNonQuery();
+        //        DbConnect.Close();
 
-            }
-        }
+        //    }
+        //}
     }
 }
