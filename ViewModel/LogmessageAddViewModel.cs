@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
-using ProjektMonitoringNuget.Business;
+using ProjektMonitoringNuget.DBAccess;
 using ProjektMonitoringNuget.View.Commands;
 
 namespace ProjektMonitoringNuget.ViewModel
@@ -17,19 +18,19 @@ namespace ProjektMonitoringNuget.ViewModel
                                                                                               , new UIPropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty SeverityProperty = DependencyProperty.Register("Severity"
-                                                                                               , typeof(string)
+                                                                                               , typeof(DataTable)
                                                                                                , typeof(LogmessageAddViewModel)
-                                                                                               , new UIPropertyMetadata(string.Empty));
+                                                                                               , new UIPropertyMetadata(SelectSeverity()));
 
-        public static readonly DependencyProperty SeverityListProperty = DependencyProperty.Register("SeverityList"
-                                                                                                   , typeof(List<string>)
-                                                                                                   , typeof(LogmessageAddViewModel)
-                                                                                                   , new UIPropertyMetadata(new List<string> {"Error", "Warn", "Info", "Debug", "Trace"}));
+        public static readonly DependencyProperty SelectedIndexSeverityProperty = DependencyProperty.Register("SelectedIndexSeverity"
+                                                                                                            , typeof(int)
+                                                                                                            , typeof(LogmessageAddViewModel)
+                                                                                                            , new UIPropertyMetadata(-1));
 
         public static readonly DependencyProperty DevicesProperty = DependencyProperty.Register("Devices"
                                                                                               , typeof(DataTable)
                                                                                               , typeof(LogmessageAddViewModel)
-                                                                                              , new UIPropertyMetadata(DbLogMessageAddLogic.Select()));
+                                                                                              , new UIPropertyMetadata(SelectDevices()));
 
         public static readonly DependencyProperty SelectedindexProperty = DependencyProperty.Register("Selectedindex"
                                                                                                     , typeof(int)
@@ -46,16 +47,16 @@ namespace ProjektMonitoringNuget.ViewModel
             set => SetValue(MessageProperty, value);
         }
 
-        public string Severity
+        public DataTable Severity
         {
-            get => (string) GetValue(SeverityProperty);
+            get => (DataTable) GetValue(SeverityProperty);
             set => SetValue(SeverityProperty, value);
         }
 
-        public List<string> SeverityList
+        public int SelectedIndexSeverity
         {
-            get => (List<string>) GetValue(SeverityProperty);
-            set => SetValue(SeverityProperty, value);
+            get => (int) GetValue(SelectedIndexSeverityProperty);
+            set => SetValue(SelectedIndexSeverityProperty, value);
         }
 
         public DataTable Devices
@@ -83,16 +84,67 @@ namespace ProjektMonitoringNuget.ViewModel
                 return _addcommand
                     ?? (_addcommand = new CommandHandler(() =>
                                                          {
-                                                             DbLogMessageAddLogic.AddMessage(this);
+                                                             AddMessage();
                                                              Message = string.Empty;
                                                              Selectedindex = -1;
-                                                             Severity = string.Empty;
+                                                             SelectedIndexSeverity = -1;
                                                          }
                                                        , () => AddCanExecute));
             }
         }
 
-        public bool AddCanExecute => !string.IsNullOrEmpty(Message) && !string.IsNullOrEmpty(Severity) && Selectedindex >= 0;
+        public bool AddCanExecute => !string.IsNullOrEmpty(Message) && SelectedIndexSeverity >= 0 && Selectedindex >= 0;
+
+        #endregion
+
+        #region Methoden
+
+        private static DataTable SelectDevices()
+        {
+            var dt = new DataTable();
+
+            using (var conn = new DbConnect().Connection)
+            {
+                var dataAdapter = new SqlDataAdapter(new SqlCommand("Select pod.Bezeichnung AS PodName, Device.hostname, Device.ip_adresse, Device.anzahlports FROM Device INNER JOIN Adresse ON Device.AdressId = Adresse.id INNER JOIN point_of_delivery AS pod ON pod.podadresse = Adresse.id;", conn));
+                dataAdapter.Fill(dt);
+            }
+
+            return dt;
+        }
+
+        private static DataTable SelectSeverity()
+        {
+            var dt = new DataTable();
+
+            using (var conn = new DbConnect().Connection)
+            {
+                var dataAdapter = new SqlDataAdapter(new SqlCommand("SELECT * FROM Severity", conn));
+                dataAdapter.Fill(dt);
+            }
+
+            return dt;
+        }
+
+        public void AddMessage()
+        {
+            var hostname = Devices.Rows[Selectedindex]["hostname"].ToString();
+            var podName = Devices.Rows[Selectedindex]["PodName"].ToString();
+            var severityId = Convert.ToInt32(Severity.Rows[SelectedIndexSeverity]["Id"].ToString());
+
+            using (var conn = new DbConnect().Connection)
+            {
+                using (var cmd = new SqlCommand("LogMessageAdd", conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@logmessage", SqlDbType.NVarChar).Value = Message;
+                    cmd.Parameters.Add("@PodName", SqlDbType.NVarChar).Value = podName;
+                    cmd.Parameters.Add("@Severity", SqlDbType.Int).Value = severityId;
+                    cmd.Parameters.Add("@hostname", SqlDbType.NVarChar).Value = hostname;
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                }
+            }
+        }
 
         #endregion
     }

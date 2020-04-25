@@ -1,21 +1,28 @@
 ﻿using System;
 using System.Data;
-using MySql.Data.MySqlClient;
+using System.Data.SqlClient;
+using ProjektMonitoringNuget.Properties;
 
 namespace ProjektMonitoringNuget.DBAccess
 {
-    public static class DbConnect
+    public class DbConnect
     {
-        private static readonly MySqlBaseConnectionStringBuilder Builder = new MySqlConnectionStringBuilder {Server = "localhost", Database = "testat", UserID = "Monitoring", Password = "secret"};
-        public static MySqlConnection Connection { get; } = new MySqlConnection(Builder.ConnectionString);
+        private static SqlConnectionStringBuilder Builder = new SqlConnectionStringBuilder()
+                                                                     {
+                                                                         DataSource = Settings.Default.Datasource
+                                                                       , InitialCatalog = Settings.Default.InitialCatalog
+                                                                       , UserID = Settings.Default.UserId
+                                                                       , Password = Settings.Default.Password
+                                                                     };
+        public SqlConnection Connection { get; } = new SqlConnection(Builder.ConnectionString);
 
-        public static void Open()
-        {
+        public void Open(){
+            
             try { Connection.Open(); }
             catch (Exception) { Connection.Close(); }
         }
 
-        public static void Close()
+        public void Close()
         {
             if (Connection.State == ConnectionState.Open) Connection.Close();
         }

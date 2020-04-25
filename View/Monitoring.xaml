@@ -6,8 +6,8 @@
         xmlns:local = "clr-namespace:ProjektMonitoringNuget.ViewModel"
         mc:Ignorable = "d"
         Title = "Monitoring"
-        Height = "1000"
-        Width = "800">
+        Height = "600"
+        Width = "645">
     <Window.Resources>
         <local:MonitoringViewModel x:Key = "Monitoringvm" />
     </Window.Resources>
@@ -28,6 +28,7 @@
                   Grid.Column = "0"
                   Grid.ColumnSpan = "3"
                   Grid.Row = "0"
+                  FontSize="14"
                   CanUserAddRows = "False"
                   CanUserDeleteRows = "False"
                   CanUserSortColumns = "False"

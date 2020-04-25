@@ -6,22 +6,23 @@
         xmlns:local = "clr-namespace:ProjektMonitoringNuget.ViewModel"
         mc:Ignorable = "d"
         Title = "Log eintragen"
-        Height = "1000"
-        Width = "800">
+        Height = "600"
+        Width = "645">
     <Window.Resources>
         <local:LogmessageAddViewModel x:Key = "LogmessageAddvm" />
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120" />
             <ColumnDefinition />
             <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="120" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height = "25" />
             <RowDefinition Height = "50" />
-            <RowDefinition Height = "50" /> <RowDefinition Height = "110" />
+            <RowDefinition Height = "200" /> 
+            <RowDefinition Height = "200" />
             <RowDefinition />
             <RowDefinition Height = "50" />
         </Grid.RowDefinitions>
@@ -40,23 +41,29 @@
                Grid.Row = "2"
                Grid.Column = "0"
                HorizontalAlignment = "Right"
-               VerticalAlignment = "Center"
+               VerticalAlignment = "Top"
                FontSize = "16" />
-        <ListView Grid.Row = "2"
-                  Grid.RowSpan = "2"
+        <DataGrid Grid.Row = "2"
+                  Grid.RowSpan = "1"
                   Grid.Column = "1"
-                  Grid.ColumnSpan = "2"
-                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= SeverityList}"
-                  SelectedValue = "{Binding Source={StaticResource LogmessageAddvm},Path= Severity}"
-                  FontSize = "20" />
+                  Grid.ColumnSpan = "1"
+                  ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Severity}"
+                  SelectedIndex="{Binding Source = {StaticResource LogmessageAddvm},Path = SelectedIndexSeverity}"
+                  FontSize = "20"
+                  CanUserAddRows = "False"
+                  CanUserDeleteRows = "False"
+                  CanUserSortColumns = "False"
+                  CanUserReorderColumns = "False"
+                  IsTextSearchEnabled = "False"
+                  IsReadOnly = "True" />
         <Label Content = "Geräte:"
-               Grid.Row = "4"
+               Grid.Row = "3"
                Grid.Column = "0"
                Height = "50"
                HorizontalAlignment = "Right"
                VerticalAlignment = "Top"
                FontSize = "16" />
-        <DataGrid Grid.Row = "4"
+        <DataGrid Grid.Row = "3"
                   Grid.Column = "1"
                   Grid.ColumnSpan = "2"
                   ItemsSource = "{Binding Source={StaticResource LogmessageAddvm},Path= Devices}"

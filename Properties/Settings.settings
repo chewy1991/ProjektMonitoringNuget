@@ -1,7 +1,18 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ProjektMonitoringNuget.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Datasource" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">.\ZBW</Value>
+    </Setting>
+    <Setting Name="InitialCatalog" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">testat</Value>
+    </Setting>
+    <Setting Name="UserId" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Sa</Value>
+    </Setting>
+    <Setting Name="Password" Type="System.String" Scope="User">
+      <Value Profile="(Default)">A120817787k</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>
